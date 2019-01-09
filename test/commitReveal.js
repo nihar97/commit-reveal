@@ -49,16 +49,7 @@ contract('CommitReveal', (accounts) => {
         assert.equal(balance - (transaction1.receipt.gasUsed * gasprice1) - (transaction2.receipt.gasUsed * gasprice2), newBalance)
     })  
 
-    // // should require reveal in time limit and return total stake divided amongst people who revealed
-    // it('// should require reveal in time limit and return total stake divided amongst people who revealed', async() => {
-    //     await instance.commitVote(web3.utils.soliditySha3("2secret1"), {from: accounts[0], value: web3.utils.toWei("1", "ether")});
-    //     let balance = await web3.eth.getBalance(accounts[0]);
-    //     await instance.commitVote(web3.utils.soliditySha3("2secret2"), {from: accounts[1], value: web3.utils.toWei("1", "ether")});
-    //     await instance.revealVote("2secret1", web3.utils.soliditySha3("2secret1"));
-    //     await utils.increaseTimestamp(450);
-    //     let newBalance = await web3.eth.getBalance(accounts[0]);
-    //     assert.equal(newBalance, balance);
-    // })
+    
 
     // should resolve result upon last reveal and emit answer
     it('should resolve result upon last reveal and emit answer', async() => {
@@ -77,6 +68,19 @@ contract('CommitReveal', (accounts) => {
             }
         });
 
+    })
+
+    // should require reveal in time limit and return total stake divided amongst people who revealed
+    it('should require reveal in time limit and return total stake divided amongst people who revealed', async() => {
+        await instance.commitVote(web3.utils.soliditySha3("2secret1"), {from: accounts[0], value: web3.utils.toWei("1", "ether")});
+        let balance = await web3.eth.getBalance(accounts[0]);
+        await instance.commitVote(web3.utils.soliditySha3("2secret2"), {from: accounts[1], value: web3.utils.toWei("1", "ether")});
+        await instance.revealVote("2secret1", web3.utils.soliditySha3("2secret1"));
+        await web3.currentProvider.send({jsonrpc: "2.0", method: "evm_increaseTime", params: [450], id: 0}, function() {})
+        await web3.currentProvider.send({jsonrpc: "2.0", method: "evm_mine", params: [], id: 0}, function() {})
+        await instance.claimReward();
+        let newBalance = await web3.eth.getBalance(accounts[0]);
+        assert.equal(newBalance, balance);
     })
 
 

@@ -108,9 +108,13 @@ contract commitReveal {
         require(now > endingTime);
         if (!rewardTaken){
             revealLimitExceeded();
+            msg.sender.transfer(revealersReward);
+            rewardees[msg.sender] = true;
+            rewardTaken = true;
         } else {
             msg.sender.transfer(revealersReward);
             rewardees[msg.sender] = true;
+            rewardTaken = true;
         }
     }
 

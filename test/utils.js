@@ -18,7 +18,7 @@ function getParamFromTxEvent(transaction, paramName, contractFactory, eventName)
     }
 }
 
-function mineBlock(web3, reject, resolve) {
+function mineBlock(reject, resolve) {
     web3.currentProvider.sendAsync({
         method: "evm_mine",
         jsonrpc: "2.0",
