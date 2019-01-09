@@ -19,8 +19,8 @@ contract commitReveal {
     mapping(address => bool) revealers;
     mapping(address => bool) rewardees;
     bool rewardTaken = false;
-    event newCommit(string, bytes32);
-    event winner(string, string);
+    event newCommit(string s, bytes32 commit);
+    event winner(string s1, string s2);
 
     constructor (uint n, uint stake, uint allowedPhaseSeconds, 
     string _option1, string _option2) {
