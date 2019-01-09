@@ -1,3 +1,6 @@
+const Web3 = require('web3')
+var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
+web3.providers.HttpProvider.prototype.sendAsync = web3.providers.HttpProvider.prototype.send
 function getParamFromTxEvent(transaction, paramName, contractFactory, eventName) {
     assert.isObject(transaction)
     let logs = transaction.logs
@@ -23,7 +26,7 @@ function mineBlock(web3, reject, resolve) {
       }, (e) => (e ? reject(e) : resolve()))
 }
 
-function increaseTimestamp(web3, increase) {
+function increaseTimestamp(increase) {
     return new Promise((resolve, reject) => {
         web3.currentProvider.sendAsync({
             method: "evm_increaseTime",
